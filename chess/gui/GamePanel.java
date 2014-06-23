@@ -88,7 +88,7 @@ public final class GamePanel extends JPanel {
 		
 		// Create combo boxes for time options
 		Integer[] minutesPerPlayer = {2, 5, 10, 20, 30, 60, 90, 120};
-		Integer[] incrementPerPlayer = {0, 2, 5, 10, 20, 30, 60, 120, 240, };
+		Integer[] incrementPerPlayer = {0, 2, 5, 10, 20, 30, 60, 120, 240};
 		timeDropdown = new JComboBox<Integer>(minutesPerPlayer);
 		timeDropdown.setSelectedIndex(2);
 		incrementDropdown = new JComboBox<Integer>(incrementPerPlayer);
@@ -344,25 +344,33 @@ public final class GamePanel extends JPanel {
 	 */
 	private String gameOverResult() {
 
+        // White is always lower unless a person is playing as black
+		String lowerName = "White";
+		String upperName = "Black";		
+		if (human == HUMAN_BLACK) {
+			lowerName = "Black";
+			upperName = "White";
+		}
+		
 		// Test for out of time
 		if (lowersTurn && lowerClock.msecleft <= 0) {
-			return lowerName.getText() + " ran out of time. " +
-					upperName.getText() + " wins!";
+			return lowerName + " ran out of time. " +
+					upperName + " wins!";
 		}
 
 		if (!lowersTurn && upperClock.msecleft <= 0) {
-			return upperName.getText() + " ran out of time. " +
-					lowerName.getText() + " wins!";
+			return upperName + " ran out of time. " +
+					lowerName + " wins!";
 		}		
 
 		// No more moves, determine if it's a check mate or stale mate
 		if(board.generateMoves().size() == 0 ) {
 			if(board.inCheck()) {
 				if (lowersTurn) {
-					return "Checkmate. " + lowerName.getText() + " wins!";
+					return "Checkmate. " + lowerName + " wins!";
 				}
 				else {
-					return "Checkmate. " + upperName.getText() + " wins!";
+					return "Checkmate. " + upperName + " wins!";
 				}
 			}
 			else {
